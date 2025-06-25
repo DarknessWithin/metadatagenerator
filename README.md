@@ -87,3 +87,114 @@ metadatageneration/
 ├── requirements.txt            # Python dependencies
 └── README.md
 ```
+Windows-Specific Paths
+Update these paths in backend/ocr.py and extractor.py
+  ```python
+pytesseract.pytesseract.tesseract_cmd = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
+POPPLER_PATH = r"C:\poppler-24.08.0\Library\bin"
+```
+📋 Supported Formats
+| Format  | Description              | Supported Features                 |
+| ------- | ------------------------ | ---------------------------------- |
+| PDF     | Portable Document Format | Text extraction + OCR (if scanned) |
+| DOCX    | Microsoft Word Document  | Structured text extraction         |
+| TXT     | Plain Text File          | Raw text handling                  |
+| PNG/JPG | Image Formats            | OCR-based text extraction          |
+
+🤖 AI Models (via OpenRouter)
+Supports the following models:
+
+meta-llama/llama-3-8b-instruct (default)
+
+openai/gpt-3.5-turbo
+
+anthropic/claude-3-haiku
+
+google/gemini-pro
+
+mistralai/mistral-7b-instruct
+
+To switch models, change in metadata_gen.py:
+```python
+model = "openai/gpt-3.5-turbo"
+```
+📊 Metadata Fields Extracted
+Title, Summary, Keywords
+
+Language, Sentiment, Category
+
+Named Entities (People, Orgs, Locations)
+
+Sections Present, Important Dates
+
+Intended Audience, Reading Time
+
+Presence of Charts, Tables, Images
+
+Bullet Point Summary, Tags
+
+🧪 Testing
+Example usage from backend modules:
+```python
+# Test extraction
+from backend.extractor import extract_text
+print(extract_text("sample.pdf"))
+
+# Test OCR
+from backend.ocr import extract_text_from_image
+print(extract_text_from_image("sample.png"))
+
+# Test metadata generation
+from backend.metadata_gen import generate_metadata
+print(generate_metadata("your text"))
+```
+🚀 Deployment
+Local
+```bash
+streamlit run app/mainfile.py --server.port 8501
+```
+Streamlit Cloud
+Push to GitHub
+
+Go to https://share.streamlit.io
+
+Link your repo and add OPENROUTER_API_KEY as a secret
+
+Docker (optional)
+```Dockerfile
+FROM python:3.9-slim
+RUN apt update && apt install -y tesseract-ocr poppler-utils
+COPY . /app
+WORKDIR /app
+RUN pip install -r requirements.txt
+EXPOSE 8501
+CMD ["streamlit", "run", "app/mainfile.py", "--server.port=8501", "--server.address=0.0.0.0"]
+```
+🐞 Troubleshooting
+| Issue                 | Fix                                   |
+| --------------------- | ------------------------------------- |
+| Tesseract not found   | Install & set path in code            |
+| `fitz` module missing | `pip install PyMuPDF`                 |
+| API key errors (401)  | Check `.env` file                     |
+| Streamlit not opening | Ensure you're not in bare script mode |
+
+🤝 Contribution
+Fork the repo
+
+Create a new branch
+
+Commit changes
+
+Push and open a pull request ✅
+
+📜 License
+MIT License. See LICENSE.
+
+👨‍💻 Author
+Tanishq Sharma
+🎓 BTech @ IIT Roorkee
+📫 112005tani@gmail.com
+🌐 github.com/DarknessWithin
+
+Built with ❤️ using Python, Streamlit, OCR, and GenAI.
+
